@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,7 +42,7 @@
     }
 
     .search-box {
-      flex: 1;
+      width: 100%;
       max-width: 500px;
     }
 
@@ -78,7 +79,7 @@
     }
 
     .section {
-      padding: 30px 25px 50px;
+      padding: 35px 25px 60px;
       max-width: 1400px;
       margin: auto;
     }
@@ -172,10 +173,6 @@
         font-size: 25px;
       }
 
-      .search-box {
-        width: 100%;
-      }
-
       .hero {
         padding: 55px 15px;
       }
@@ -204,6 +201,7 @@
   </style>
 </head>
 
+
 <body>
 
   <header>
@@ -213,12 +211,14 @@
     </div>
 
     <div class="search-box">
+
       <input
         id="search"
         type="text"
         placeholder="ابحث عن أنمي..."
         autocomplete="off"
       >
+
     </div>
 
   </header>
@@ -259,13 +259,15 @@
 
   <script>
 
-    const moviesContainer = document.getElementById("movies");
-    const searchInput = document.getElementById("search");
+    const moviesContainer =
+      document.getElementById("movies");
+
+    const searchInput =
+      document.getElementById("search");
 
     let animeList = [];
 
 
-    // جلب أحدث الأنميات
     async function loadAnime() {
 
       try {
@@ -275,7 +277,7 @@
         );
 
         if (!response.ok) {
-          throw new Error("حدث خطأ");
+          throw new Error("API Error");
         }
 
         const result = await response.json();
@@ -298,10 +300,11 @@
     }
 
 
-    // عرض الأنميات
     function displayAnime(list) {
 
-      if (list.length === 0) {
+      moviesContainer.innerHTML = "";
+
+      if (!list || list.length === 0) {
 
         moviesContainer.innerHTML = `
           <div class="error">
@@ -313,9 +316,6 @@
       }
 
 
-      moviesContainer.innerHTML = "";
-
-
       list.forEach(anime => {
 
         const title =
@@ -323,30 +323,27 @@
           anime.title ||
           "Anime";
 
-
         const poster =
           anime.images?.jpg?.large_image_url ||
           anime.images?.jpg?.image_url ||
           "";
-
 
         const score =
           anime.score
             ? anime.score.toFixed(1)
             : "N/A";
 
-
         const year =
           anime.year ||
           "غير معروف";
-
 
         const episodes =
           anime.episodes ||
           "?";
 
 
-        const card = document.createElement("div");
+        const card =
+          document.createElement("div");
 
         card.className = "card";
 
@@ -389,9 +386,8 @@
 
         card.addEventListener("click", () => {
 
-          if (anime.url) {
-            window.open(anime.url, "_blank");
-          }
+          window.location.href =
+            `anime.html?id=${anime.mal_id}`;
 
         });
 
@@ -403,66 +399,68 @@
     }
 
 
-    // البحث
-    searchInput.addEventListener("input", function () {
+    searchInput.addEventListener(
+      "input",
+      function () {
 
-      const searchText =
-        this.value
-          .toLowerCase()
-          .trim();
+        const searchText =
+          this.value
+            .toLowerCase()
+            .trim();
 
 
-      if (!searchText) {
+        if (!searchText) {
 
-        displayAnime(animeList);
+          displayAnime(animeList);
 
-        return;
+          return;
+
+        }
+
+
+        const filtered =
+          animeList.filter(anime => {
+
+            const title =
+              (
+                anime.title ||
+                ""
+              ).toLowerCase();
+
+
+            const englishTitle =
+              (
+                anime.title_english ||
+                ""
+              ).toLowerCase();
+
+
+            const japaneseTitle =
+              (
+                anime.title_japanese ||
+                ""
+              ).toLowerCase();
+
+
+            return (
+              title.includes(searchText) ||
+              englishTitle.includes(searchText) ||
+              japaneseTitle.includes(searchText)
+            );
+
+          });
+
+
+        displayAnime(filtered);
 
       }
+    );
 
 
-      const filtered =
-        animeList.filter(anime => {
-
-          const title =
-            (
-              anime.title ||
-              ""
-            ).toLowerCase();
-
-
-          const englishTitle =
-            (
-              anime.title_english ||
-              ""
-            ).toLowerCase();
-
-
-          const japaneseTitle =
-            (
-              anime.title_japanese ||
-              ""
-            ).toLowerCase();
-
-
-          return (
-            title.includes(searchText) ||
-            englishTitle.includes(searchText) ||
-            japaneseTitle.includes(searchText)
-          );
-
-        });
-
-
-      displayAnime(filtered);
-
-    });
-
-
-    // تشغيل الموقع
     loadAnime();
 
   </script>
 
 </body>
+
 </html>
