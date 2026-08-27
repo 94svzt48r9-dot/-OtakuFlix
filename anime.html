@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OtakuFlix - تفاصيل الأنمي</title>
+
+  <title>OtakuFlix</title>
 
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -21,74 +24,76 @@
 
     header {
       background: #111118;
-      padding: 18px 25px;
-      border-bottom: 1px solid #252530;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #292934;
     }
 
     .logo {
       color: #e50914;
-      font-size: 27px;
+      font-size: 32px;
       font-weight: bold;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 25px 15px 60px;
     }
 
     .back {
       display: inline-block;
-      margin: 25px;
+      background: #252530;
       color: white;
       text-decoration: none;
-      background: #24242e;
-      padding: 11px 18px;
-      border-radius: 9px;
-    }
-
-    .back:hover {
-      background: #e50914;
+      padding: 13px 20px;
+      border-radius: 11px;
+      margin-bottom: 25px;
+      font-size: 17px;
     }
 
     .details {
-      max-width: 1100px;
-      margin: 20px auto 50px;
+      background: #15151d;
+      border: 1px solid #292934;
+      border-radius: 20px;
       padding: 25px;
+      margin-bottom: 40px;
+    }
+
+    .top {
       display: flex;
-      gap: 30px;
-      background: #111118;
-      border-radius: 18px;
+      gap: 28px;
+      align-items: flex-start;
     }
 
     .poster {
-      width: 280px;
-      height: 400px;
+      width: 250px;
+      min-width: 250px;
+      height: 360px;
       object-fit: cover;
-      border-radius: 12px;
-      background: #222;
+      border-radius: 15px;
     }
 
-    .content {
+    .info {
       flex: 1;
     }
 
     h1 {
-      font-size: 35px;
-      margin-bottom: 15px;
+      font-size: 34px;
+      margin-bottom: 20px;
     }
 
-    .description {
-      color: #bbb;
-      line-height: 1.9;
-      margin: 20px 0;
-    }
-
-    .info {
+    .badges {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin: 15px 0;
+      margin-bottom: 25px;
     }
 
-    .tag {
-      background: #24242e;
-      padding: 9px 13px;
-      border-radius: 8px;
+    .badge {
+      background: #252530;
+      padding: 10px 14px;
+      border-radius: 10px;
       color: #ddd;
     }
 
@@ -96,259 +101,698 @@
       color: #ffd43b;
     }
 
-    .episodes-section {
-      max-width: 1100px;
-      margin: auto;
-      padding: 25px;
+    .story-title {
+      font-size: 23px;
+      margin-bottom: 12px;
     }
 
-    .episodes-section h2 {
+    .story {
+      color: #d0d0d0;
+      line-height: 2;
+      font-size: 17px;
+    }
+
+    .genres {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .genre {
+      background: #e50914;
+      padding: 7px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+
+    .section-title {
+      font-size: 30px;
       margin-bottom: 20px;
     }
 
     .episodes {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 12px;
     }
 
     .episode {
-      background: #181820;
-      border: 1px solid #292934;
-      color: white;
-      padding: 14px;
-      border-radius: 9px;
-      cursor: pointer;
+      background: #181821;
+      border: 1px solid #2c2c38;
+      border-radius: 12px;
+      padding: 16px 10px;
       text-align: center;
     }
 
-    .episode:hover {
-      background: #e50914;
-      border-color: #e50914;
+    .episode-number {
+      font-size: 19px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .episode-title {
+      color: #aaa;
+      font-size: 13px;
+      line-height: 1.5;
     }
 
     .loading {
       text-align: center;
-      padding: 70px 20px;
       color: #aaa;
+      padding: 40px 10px;
+      font-size: 18px;
+    }
+
+    .error {
+      text-align: center;
+      color: #ff7777;
+      padding: 40px 10px;
     }
 
     footer {
+      border-top: 1px solid #20202a;
       text-align: center;
+      padding: 30px;
       color: #666;
-      padding: 40px 20px;
-      margin-top: 30px;
     }
 
     @media (max-width: 700px) {
-      .details {
-        margin: 10px 15px 35px;
-        padding: 18px;
+
+      .top {
         flex-direction: column;
+        align-items: center;
       }
 
       .poster {
-        width: 100%;
-        max-width: 280px;
-        height: 390px;
-        margin: auto;
+        width: 220px;
+        min-width: 220px;
+        height: 320px;
       }
 
       h1 {
         font-size: 27px;
+        text-align: center;
       }
 
-      .episodes-section {
-        padding: 20px 15px;
+      .badges {
+        justify-content: center;
       }
+
+      .story-title {
+        text-align: center;
+      }
+
+      .story {
+        text-align: center;
+        font-size: 16px;
+      }
+
+      .episodes {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
-  <header>
-    <div class="logo">🎬 OtakuFlix</div>
-  </header>
+<header>
 
-  <a href="index.html" class="back">← العودة للرئيسية</a>
-
-  <div id="details" class="loading">
-    جاري تحميل معلومات الأنمي...
+  <div class="logo">
+    🎬 OtakuFlix
   </div>
 
-  <section class="episodes-section">
-    <h2>📺 الحلقات</h2>
-
-    <div id="episodes" class="episodes"></div>
-  </section>
-
-  <footer>
-    © 2026 OtakuFlix
-  </footer>
-
-  <script>
-
-    const params = new URLSearchParams(window.location.search);
-    const animeId = params.get("id");
-
-    const details = document.getElementById("details");
-    const episodes = document.getElementById("episodes");
+</header>
 
 
-    async function loadAnime() {
+<main class="container">
 
-      if (!animeId) {
-        details.innerHTML = "❌ لم يتم تحديد الأنمي.";
-        return;
-      }
+  <a href="index.html" class="back">
+    ← العودة للرئيسية
+  </a>
 
-      try {
 
-        const response = await fetch(
-          `https://api.jikan.moe/v4/anime/${animeId}/full`
+  <div id="details" class="details">
+
+    <div class="loading">
+      جاري تحميل التفاصيل...
+    </div>
+
+  </div>
+
+
+  <h2 class="section-title">
+    📺 الحلقات
+  </h2>
+
+
+  <div id="episodes" class="episodes">
+
+    <div class="loading">
+      جاري تحميل الحلقات...
+    </div>
+
+  </div>
+
+</main>
+
+
+<footer>
+  OtakuFlix 2026 ©
+</footer>
+
+
+<script>
+
+/* =========================================
+   قراءة رقم الأنمي من الرابط
+========================================= */
+
+const params =
+  new URLSearchParams(window.location.search);
+
+const animeId =
+  Number(params.get("id"));
+
+
+/* =========================================
+   بيانات الأنميات الثمانية
+========================================= */
+
+const animeData = {
+
+  5114: {
+
+    title: "Fullmetal Alchemist: Brotherhood",
+
+    arabicTitle: "الخيميائي الفولاذي: الأخوّة",
+
+    year: "2009",
+
+    episodes: "64",
+
+    score: "9.1",
+
+    status: "مكتمل",
+
+    image:
+      "https://cdn.myanimelist.net/images/anime/1208/94745l.jpg",
+
+    genres: [
+      "أكشن",
+      "مغامرة",
+      "دراما",
+      "فانتازيا"
+    ],
+
+    story:
+      "تدور القصة حول الأخوين إدوارد وألفونس إلريك، اللذين حاولا استخدام الخيمياء لإعادة والدتهما إلى الحياة، لكن التجربة انتهت بكارثة أفقدت ألفونس جسده وذراعاً وساقاً لإدوارد. ينطلق الأخوان في رحلة للبحث عن حجر الفيلسوف، على أمل استعادة أجسادهما، وخلال رحلتهما يكتشفان مؤامرة خطيرة تهدد الدولة بأكملها."
+  },
+
+
+  16498: {
+
+    title: "Attack on Titan",
+
+    arabicTitle: "هجوم العمالقة",
+
+    year: "2013",
+
+    episodes: "25",
+
+    score: "9.1",
+
+    status: "مكتمل",
+
+    image:
+      "https://cdn.myanimelist.net/images/anime/10/47347l.jpg",
+
+    genres: [
+      "أكشن",
+      "دراما",
+      "فانتازيا",
+      "غموض"
+    ],
+
+    story:
+      "تعيش البشرية خلف أسوار ضخمة تحميها من العمالقة، وهم مخلوقات هائلة تلتهم البشر. يتغير كل شيء عندما يظهر عملاق ضخم ويتمكن من اختراق أحد الأسوار. يشهد إيرين ييغر مأساة تدفعه إلى الانضمام للجيش، مصمماً على القضاء على العمالقة واكتشاف الحقيقة المخفية وراء وجودهم والأسوار التي يعيش البشر خلفها."
+  },
+
+
+  1535: {
+
+    title: "Death Note",
+
+    arabicTitle: "مذكرة الموت",
+
+    year: "2006",
+
+    episodes: "37",
+
+    score: "8.6",
+
+    status: "مكتمل",
+
+    image:
+      "https://cdn.myanimelist.net/images/anime/9/9453l.jpg",
+
+    genres: [
+      "غموض",
+      "نفسي",
+      "خارق للطبيعة",
+      "إثارة"
+    ],
+
+    story:
+      "يعثر الطالب العبقري لايت ياغامي على مذكرة غامضة تمنح صاحبها القدرة على قتل أي شخص بمجرد كتابة اسمه فيها. يقرر لايت استخدام المذكرة للقضاء على المجرمين وبناء عالم جديد يخلو من الجريمة، لكنه سرعان ما يجد نفسه مطارداً من المحقق الغامض المعروف باسم إل، وتبدأ واحدة من أشهر المواجهات العقلية في عالم الأنمي."
+  },
+
+
+  30276: {
+
+    title: "One Punch Man",
+
+    arabicTitle: "ون بانش مان",
+
+    year: "2015",
+
+    episodes: "12",
+
+    score: "8.5",
+
+    status: "مستمر",
+
+    image:
+      "https://cdn.myanimelist.net/images/anime/12/76049l.jpg",
+
+    genres: [
+      "أكشن",
+      "كوميديا",
+      "خيال"
+    ],
+
+    story:
+      "سايتاما رجل بسيط أصبح بطلاً خارقاً بعد تدريب شاق استمر ثلاث سنوات. المفاجأة أن قوته أصبحت هائلة لدرجة أنه يستطيع هزيمة معظم أعدائه بلكمة واحدة فقط. ورغم قوته الخارقة، يشعر سايتاما بالملل لأنه لا يجد خصماً يستطيع منحه تحدياً حقيقياً، إلى أن يبدأ بالتعرف على أبطال وأعداء جدد يغيرون حياته."
+  },
+
+
+  11757: {
+
+    title: "Sword Art Online",
+
+    arabicTitle: "سورد آرت أونلاين",
+
+    year: "2012",
+
+    episodes: "25",
+
+    score: "7.2",
+
+    status: "مكتمل",
+
+    image:
+      "https://cdn.myanimelist.net/images/anime/11/39717l.jpg",
+
+    genres: [
+      "أكشن",
+      "مغامرة",
+      "رومانسية",
+      "فانتازيا"
+    ],
+
+    story:
+      "يدخل آلاف اللاعبين إلى لعبة واقع افتراضي تسمى Sword Art Online، لكنهم يكتشفون أنهم أصبحوا محاصرين داخل اللعبة، وأن الموت فيها يعني الموت في العالم الحقيقي. يبدأ كيريتو، أحد أفضل اللاعبين، رحلة خطيرة للوصول إلى نهاية اللعبة وإنقاذ نفسه والآخرين، وخلال الرحلة يلتقي بأسونا وتنشأ بينهما علاقة مهمة."
+  },
+
+
+  21: {
+
+    title: "One Piece",
+
+    arabicTitle: "ون بيس",
+
+    year: "1999",
+
+    episodes: "1000+",
+
+    score: "8.7",
+
+    status: "مستمر",
+
+    image:
+      "https://cdn.myanimelist.net/images/anime/6/73245l.jpg",
+
+    genres: [
+      "أكشن",
+      "مغامرة",
+      "كوميديا",
+      "فانتازيا"
+    ],
+
+    story:
+      "ينطلق مونكي دي لوفي في رحلة بحرية ليصبح ملك القراصنة ويعثر على الكنز الأسطوري المعروف باسم ون بيس. يجمع لوفي مجموعة من الأصدقاء المميزين، ويخوض معهم مغامرات خطيرة في البحار والجزر المختلفة. ومع مرور الوقت يكتشفون أسراراً كبيرة عن العالم والحكومة والتاريخ المفقود."
+  },
+
+
+  20: {
+
+    title: "Naruto",
+
+    arabicTitle: "ناروتو",
+
+    year: "2002",
+
+    episodes: "220",
+
+    score: "8.0",
+
+    status: "مكتمل",
+
+    image:
+      "https://cdn.myanimelist.net/images/anime/13/17405l.jpg",
+
+    genres: [
+      "أكشن",
+      "مغامرة",
+      "فنون قتالية",
+      "كوميديا"
+    ],
+
+    story:
+      "ناروتو أوزوماكي نينجا شاب يعيش في قرية كونوها ويحلم بأن يصبح الهوكاغي، أقوى وأهم نينجا في القرية. يعاني ناروتو من الوحدة ونظرة الآخرين إليه بسبب وجود وحش قوي مختوم بداخله. ومع بداية تدريبه وتكوينه فريقاً مع ساسكي وساكورا، يبدأ رحلة طويلة مليئة بالصداقات والمنافسات والمعارك."
+  },
+
+
+  269: {
+
+    title: "Bleach",
+
+    arabicTitle: "بليتش",
+
+    year: "2004",
+
+    episodes: "366",
+
+    score: "8.2",
+
+    status: "مكتمل",
+
+    image:
+      "https://cdn.myanimelist.net/images/anime/3/40451l.jpg",
+
+    genres: [
+      "أكشن",
+      "مغامرة",
+      "خارق للطبيعة",
+      "فنون قتالية"
+    ],
+
+    story:
+      "يتمكن إيتشيغو كوروساكي من رؤية الأرواح منذ طفولته، لكن حياته تتغير عندما يلتقي بشينيغامي تدعى روكيا. بعد إصابتها، يحصل إيتشيغو على قواها ويصبح مسؤولاً عن حماية البشر من الأرواح الشريرة المعروفة باسم الهولو. ومع الوقت يكتشف إيتشيغو أسراراً أكبر عن عالم الأرواح وعن قوته الحقيقية."
+  }
+
+};
+
+
+/* =========================================
+   عناصر الصفحة
+========================================= */
+
+const details =
+  document.getElementById("details");
+
+const episodes =
+  document.getElementById("episodes");
+
+
+/* =========================================
+   التأكد من وجود الأنمي
+========================================= */
+
+if (!animeId || !animeData[animeId]) {
+
+  details.innerHTML = `
+    <div class="error">
+      ❌ لم يتم العثور على هذا الأنمي.
+      <br><br>
+      ارجع للرئيسية واختر أنمي من القائمة.
+    </div>
+  `;
+
+  episodes.innerHTML = "";
+
+} else {
+
+  showDetails(animeData[animeId]);
+
+  loadEpisodes(animeId);
+
+}
+
+
+/* =========================================
+   عرض التفاصيل العربية
+========================================= */
+
+function showDetails(anime) {
+
+  document.title =
+    anime.arabicTitle + " - OtakuFlix";
+
+
+  details.innerHTML = `
+
+    <div class="top">
+
+      <img
+        class="poster"
+        src="${anime.image}"
+        alt="${anime.arabicTitle}"
+      >
+
+
+      <div class="info">
+
+        <h1>
+          ${anime.arabicTitle}
+        </h1>
+
+
+        <div style="
+          color:#999;
+          margin-bottom:18px;
+          font-size:16px;
+        ">
+          ${anime.title}
+        </div>
+
+
+        <div class="badges">
+
+          <span class="badge">
+            📅 ${anime.year}
+          </span>
+
+          <span class="badge">
+            🎞️ ${anime.episodes} حلقة
+          </span>
+
+          <span class="badge rating">
+            ⭐ ${anime.score}
+          </span>
+
+          <span class="badge">
+            ${anime.status}
+          </span>
+
+        </div>
+
+
+        <h2 class="story-title">
+          📖 قصة الأنمي
+        </h2>
+
+
+        <p class="story">
+          ${anime.story}
+        </p>
+
+
+        <div class="genres">
+
+          ${anime.genres.map(
+            genre => `
+              <span class="genre">
+                ${genre}
+              </span>
+            `
+          ).join("")}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================
+   تحميل الحلقات من Jikan
+========================================= */
+
+async function loadEpisodes(id) {
+
+  episodes.innerHTML = `
+    <div class="loading">
+      جاري تحميل الحلقات...
+    </div>
+  `;
+
+
+  try {
+
+    let allEpisodes = [];
+
+    let page = 1;
+
+    let hasNext = true;
+
+
+    /*
+      كل صفحة تحتوي حتى 100 حلقة.
+    */
+
+    while (hasNext && page <= 20) {
+
+      const response = await fetch(
+        `https://api.jikan.moe/v4/anime/${id}/episodes?page=${page}`
+      );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Episode request failed"
         );
 
-        const result = await response.json();
-        const anime = result.data;
+      }
 
-        document.title = `${anime.title} - OtakuFlix`;
 
-        const poster =
-          anime.images?.jpg?.large_image_url ||
-          anime.images?.jpg?.image_url ||
-          "";
+      const result =
+        await response.json();
 
-        const description =
-          anime.synopsis ||
-          "لا توجد قصة متاحة لهذا الأنمي.";
 
-        const score =
-          anime.score
-            ? anime.score.toFixed(1)
-            : "N/A";
+      if (result.data) {
 
-        const year =
-          anime.year ||
-          "غير معروف";
+        allEpisodes =
+          allEpisodes.concat(result.data);
 
-        const count =
-          anime.episodes ||
-          "?";
+      }
 
-        details.className = "details";
 
-        details.innerHTML = `
+      hasNext =
+        result.pagination?.has_next_page === true;
 
-          <img
-            class="poster"
-            src="${poster}"
-            alt="${anime.title}"
-          >
 
-          <div class="content">
+      page++;
 
-            <h1>${anime.title}</h1>
 
-            <div class="info">
+      /*
+        حتى ما نرسل طلبات بسرعة كبيرة.
+      */
 
-              <span class="tag rating">
-                ⭐ ${score}
-              </span>
+      if (hasNext) {
 
-              <span class="tag">
-                📅 ${year}
-              </span>
-
-              <span class="tag">
-                🎞️ ${count} حلقة
-              </span>
-
-              <span class="tag">
-                ${anime.status || "غير معروف"}
-              </span>
-
-            </div>
-
-            <p class="description">
-              ${description}
-            </p>
-
-          </div>
-
-        `;
-
-        loadEpisodes();
-
-      } catch (error) {
-
-        details.innerHTML =
-          "❌ حدث خطأ أثناء تحميل معلومات الأنمي.";
+        await new Promise(
+          resolve =>
+            setTimeout(resolve, 600)
+        );
 
       }
 
     }
 
 
-    async function loadEpisodes() {
+    if (allEpisodes.length === 0) {
 
-      episodes.innerHTML =
-        `<div class="loading">جاري تحميل الحلقات...</div>`;
+      episodes.innerHTML = `
+        <div class="loading">
+          لا توجد معلومات عن الحلقات حالياً.
+        </div>
+      `;
 
-      try {
-
-        const response = await fetch(
-          `https://api.jikan.moe/v4/anime/${animeId}/episodes?limit=100`
-        );
-
-        const result = await response.json();
-
-        episodes.innerHTML = "";
-
-        if (!result.data || result.data.length === 0) {
-
-          episodes.innerHTML =
-            `<p style="color:#aaa">لا توجد معلومات عن الحلقات حالياً.</p>`;
-
-          return;
-        }
-
-
-        result.data.forEach(ep => {
-
-          const button =
-            document.createElement("div");
-
-          button.className = "episode";
-
-          button.textContent =
-            `الحلقة ${ep.mal_id}`;
-
-          button.onclick = () => {
-
-            alert(
-              "هذه صفحة الحلقة التجريبية.\nسنضيف المشاهدة لاحقاً 🔥"
-            );
-
-          };
-
-          episodes.appendChild(button);
-
-        });
-
-      } catch (error) {
-
-        episodes.innerHTML =
-          `<p style="color:#aaa">تعذر تحميل الحلقات.</p>`;
-
-      }
+      return;
 
     }
 
 
-    loadAnime();
+    episodes.innerHTML = "";
 
-  </script>
+
+    allEpisodes.forEach(ep => {
+
+      const card =
+        document.createElement("div");
+
+
+      card.className =
+        "episode";
+
+
+      const number =
+        ep.mal_id || "?";
+
+
+      const title =
+        ep.title ||
+        `الحلقة ${number}`;
+
+
+      card.innerHTML = `
+
+        <div class="episode-number">
+          الحلقة ${number}
+        </div>
+
+        <div class="episode-title">
+          ${title}
+        </div>
+
+      `;
+
+
+      episodes.appendChild(card);
+
+    });
+
+
+  } catch (error) {
+
+    console.error(error);
+
+
+    episodes.innerHTML = `
+      <div class="error">
+        ⚠️ تعذر تحميل قائمة الحلقات حالياً.
+        <br><br>
+        حاول تحديث الصفحة بعد قليل.
+      </div>
+    `;
+
+  }
+
+}
+
+</script>
 
 </body>
+
 </html>
