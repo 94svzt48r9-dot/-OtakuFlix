@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>OtakuFlix - مشاهدة</title>
+<title>OtakuFlix - المشاهدة</title>
 
 <style>
 
@@ -64,8 +64,10 @@ header{
     border:1px solid #292933;
     border-radius:18px;
     overflow:hidden;
-    width:100%;
     aspect-ratio:16/9;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
 video{
@@ -76,12 +78,9 @@ video{
 }
 
 .player-message{
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
     text-align:center;
     padding:30px;
+    color:#aaa;
 }
 
 .player-icon{
@@ -90,16 +89,13 @@ video{
 }
 
 .player-message h2{
+    color:white;
     margin-bottom:12px;
-}
-
-.player-message p{
-    color:#aaa;
 }
 
 .info{
     background:#15151c;
-    border:1px solid #292933;
+    border:1px solid #292934;
     border-radius:18px;
     margin-top:20px;
     padding:25px;
@@ -164,6 +160,11 @@ video{
 
 .episode.active{
     background:#e52b25;
+    border-color:#ff5a53;
+}
+
+.has-video{
+    border-color:#4caf50;
 }
 
 .loading{
@@ -178,10 +179,10 @@ video{
     padding:35px;
 }
 
-.source-note{
-    color:#777;
-    font-size:13px;
+.source-status{
     margin-top:15px;
+    color:#aaa;
+    font-size:14px;
 }
 
 footer{
@@ -201,12 +202,19 @@ footer{
         flex-direction:column;
     }
 
+    .player-box{
+        aspect-ratio:16/10;
+    }
+
 }
 
 </style>
+
 </head>
 
+
 <body>
+
 
 <header>
 
@@ -219,8 +227,9 @@ footer{
 
 <div class="container">
 
-    <a href="javascript:history.back()" class="back">
-        ← رجوع
+
+    <a href="index.html" class="back">
+        ← العودة للرئيسية
     </a>
 
 
@@ -232,18 +241,30 @@ footer{
 
     </div>
 
+
 </div>
 
 
 <footer>
+
     © OtakuFlix 2026
+
 </footer>
+
+
+<!--
+=========================================
+تحميل ملف مصادر الفيديو
+=========================================
+-->
+
+<script src="videos.js"></script>
 
 
 <script>
 
 /* =========================================
-   قراءة الرابط
+   قراءة معلومات الرابط
 ========================================= */
 
 const params =
@@ -251,43 +272,19 @@ const params =
         window.location.search
     );
 
+
 const animeId =
     params.get("id");
+
 
 const episodeNumber =
     Number(
         params.get("episode")
     ) || 1;
 
+
 const page =
     document.getElementById("page");
-
-
-/* =========================================
-   مصادر الفيديو
-=========================================
-
-   هنا نضع مصدر كل حلقة.
-
-   مهم:
-   هذه الروابط يجب أن تكون لفيديوهات
-   تملك حق استخدامها أو يسمح صاحبها
-   بالتضمين/إعادة الاستخدام.
-
-========================================= */
-
-const videoSources = {
-
-    /*
-       مصدر تجريبي قانوني للتأكد من أن
-       مشغل الفيديو يعمل.
-
-       هذا المثال لا يمثل حلقة أنمي.
-    */
-
-    "1": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-
-};
 
 
 /* =========================================
@@ -308,7 +305,7 @@ if(!animeId){
 
 
 /* =========================================
-   تحميل الأنمي
+   تحميل معلومات الأنمي
 ========================================= */
 
 async function loadAnime(){
@@ -363,7 +360,37 @@ async function loadAnime(){
 
 
 /* =========================================
-   عرض الصفحة
+   الحصول على مصدر الفيديو
+========================================= */
+
+function getVideoSource(){
+
+    /*
+    نبحث عن الأنمي داخل videos.js
+    */
+
+    const animeVideos =
+        window.videoSources
+        ? window.videoSources[String(animeId)]
+        : null;
+
+
+    if(!animeVideos){
+
+        return null;
+
+    }
+
+
+    return animeVideos[
+        String(episodeNumber)
+    ] || null;
+
+}
+
+
+/* =========================================
+   عرض صفحة المشاهدة
 ========================================= */
 
 function displayPage(anime){
@@ -375,64 +402,68 @@ function displayPage(anime){
 
 
     const source =
-        videoSources[
-            String(episodeNumber)
-        ];
+        getVideoSource();
+
+
+    let playerHTML;
+
+
+    if(source){
+
+        playerHTML = `
+
+            <video
+                controls
+                playsinline
+                preload="metadata"
+            >
+
+                <source
+                    src="${escapeHTML(source)}"
+                    type="video/mp4"
+                >
+
+                متصفحك لا يدعم تشغيل الفيديو.
+
+            </video>
+
+        `;
+
+    }else{
+
+        playerHTML = `
+
+            <div class="player-message">
+
+                <div>
+
+                    <div class="player-icon">
+                        🎬
+                    </div>
+
+                    <h2>
+                        المصدر غير متوفر
+                    </h2>
+
+                    <p>
+                        لا يوجد فيديو مضاف للحلقة
+                        ${episodeNumber}
+                    </p>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
 
 
     page.innerHTML = `
 
         <div class="player-box">
 
-            ${
-                source
-                ?
-
-                `
-                <video
-                    controls
-                    playsinline
-                    preload="metadata"
-                >
-
-                    <source
-                        src="${source}"
-                        type="video/mp4"
-                    >
-
-                    متصفحك لا يدعم تشغيل الفيديو.
-
-                </video>
-                `
-
-                :
-
-                `
-
-                <div class="player-message">
-
-                    <div>
-
-                        <div class="player-icon">
-                            🎬
-                        </div>
-
-                        <h2>
-                            المصدر غير متوفر
-                        </h2>
-
-                        <p>
-                            لا يوجد فيديو مضاف للحلقة
-                            ${episodeNumber} حالياً.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                `
-
-            }
+            ${playerHTML}
 
         </div>
 
@@ -440,22 +471,27 @@ function displayPage(anime){
         <div class="info">
 
             <h1 class="anime-title">
+
                 ${escapeHTML(title)}
+
             </h1>
 
 
             <div class="episode-title">
+
                 الحلقة ${episodeNumber}
+
             </div>
 
 
             <div class="controls">
 
+
                 <button
                     class="control"
                     onclick="previousEpisode()">
 
-                    ⏮ السابقة
+                    ⏮ الحلقة السابقة
 
                 </button>
 
@@ -464,7 +500,7 @@ function displayPage(anime){
                     class="control"
                     onclick="animeDetails()">
 
-                    📖 التفاصيل
+                    📖 تفاصيل الأنمي
 
                 </button>
 
@@ -473,17 +509,21 @@ function displayPage(anime){
                     class="control"
                     onclick="nextEpisode()">
 
-                    التالية ⏭
+                    الحلقة التالية ⏭
 
                 </button>
+
 
             </div>
 
 
-            <div class="source-note">
+            <div class="source-status">
 
-                🎥 مصدر الفيديو يضاف لكل حلقة
-                من داخل نظام المصادر.
+                ${
+                    source
+                    ? "🟢 يوجد مصدر فيديو لهذه الحلقة"
+                    : "⚪ لا يوجد مصدر فيديو لهذه الحلقة حالياً"
+                }
 
             </div>
 
@@ -491,15 +531,20 @@ function displayPage(anime){
 
 
         <h2 class="episodes-title">
+
             📺 الحلقات
+
         </h2>
 
 
-        <div id="episodes"
-             class="episodes">
+        <div
+            id="episodes"
+            class="episodes">
 
             <div class="loading">
+
                 ⏳ جاري تحميل الحلقات...
+
             </div>
 
         </div>
@@ -545,7 +590,7 @@ async function loadEpisodes(){
 
             const response =
                 await fetch(
-                    `https://api.jikan.moe/v4/anime/${animeId}/episodes?page=${currentPage}`
+                    `https://api.jikan.moe/v4/anime/${encodeURIComponent(animeId)}/episodes?page=${currentPage}`
                 );
 
 
@@ -621,7 +666,9 @@ async function loadEpisodes(){
 
 
                 const button =
-                    document.createElement("div");
+                    document.createElement(
+                        "div"
+                    );
 
 
                 button.className =
@@ -639,8 +686,40 @@ async function loadEpisodes(){
                 }
 
 
-                button.textContent =
-                    `الحلقة ${number}`;
+                /*
+                إذا الحلقة لها فيديو
+                */
+
+                const animeVideos =
+                    window.videoSources
+                    ? window.videoSources[String(animeId)]
+                    : null;
+
+
+                if(
+                    animeVideos &&
+                    animeVideos[String(number)]
+                ){
+
+                    button.classList.add(
+                        "has-video"
+                    );
+
+                }
+
+
+                button.innerHTML = `
+
+                    الحلقة ${number}
+
+                    ${
+                        animeVideos &&
+                        animeVideos[String(number)]
+                        ? " 🎬"
+                        : ""
+                    }
+
+                `;
 
 
                 button.onclick =
@@ -745,6 +824,7 @@ function escapeHTML(text){
     ){
 
         return "";
+
     }
 
 
@@ -794,5 +874,7 @@ function showError(message){
 
 </script>
 
+
 </body>
+
 </html>
