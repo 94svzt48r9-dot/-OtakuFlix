@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OtakuFlix - تفاصيل الأنمي</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #08080d;
+      color: white;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #111118;
+      padding: 18px 25px;
+      border-bottom: 1px solid #252530;
+    }
+
+    .logo {
+      color: #e50914;
+      font-size: 27px;
+      font-weight: bold;
+    }
+
+    .back {
+      display: inline-block;
+      margin: 25px;
+      color: white;
+      text-decoration: none;
+      background: #24242e;
+      padding: 11px 18px;
+      border-radius: 9px;
+    }
+
+    .back:hover {
+      background: #e50914;
+    }
+
+    .details {
+      max-width: 1100px;
+      margin: 20px auto 50px;
+      padding: 25px;
+      display: flex;
+      gap: 30px;
+      background: #111118;
+      border-radius: 18px;
+    }
+
+    .poster {
+      width: 280px;
+      height: 400px;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #222;
+    }
+
+    .content {
+      flex: 1;
+    }
+
+    h1 {
+      font-size: 35px;
+      margin-bottom: 15px;
+    }
+
+    .description {
+      color: #bbb;
+      line-height: 1.9;
+      margin: 20px 0;
+    }
+
+    .info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .tag {
+      background: #24242e;
+      padding: 9px 13px;
+      border-radius: 8px;
+      color: #ddd;
+    }
+
+    .rating {
+      color: #ffd43b;
+    }
+
+    .episodes-section {
+      max-width: 1100px;
+      margin: auto;
+      padding: 25px;
+    }
+
+    .episodes-section h2 {
+      margin-bottom: 20px;
+    }
+
+    .episodes {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 12px;
+    }
+
+    .episode {
+      background: #181820;
+      border: 1px solid #292934;
+      color: white;
+      padding: 14px;
+      border-radius: 9px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .episode:hover {
+      background: #e50914;
+      border-color: #e50914;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 70px 20px;
+      color: #aaa;
+    }
+
+    footer {
+      text-align: center;
+      color: #666;
+      padding: 40px 20px;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 700px) {
+      .details {
+        margin: 10px 15px 35px;
+        padding: 18px;
+        flex-direction: column;
+      }
+
+      .poster {
+        width: 100%;
+        max-width: 280px;
+        height: 390px;
+        margin: auto;
+      }
+
+      h1 {
+        font-size: 27px;
+      }
+
+      .episodes-section {
+        padding: 20px 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">🎬 OtakuFlix</div>
+  </header>
+
+  <a href="index.html" class="back">← العودة للرئيسية</a>
+
+  <div id="details" class="loading">
+    جاري تحميل معلومات الأنمي...
+  </div>
+
+  <section class="episodes-section">
+    <h2>📺 الحلقات</h2>
+
+    <div id="episodes" class="episodes"></div>
+  </section>
+
+  <footer>
+    © 2026 OtakuFlix
+  </footer>
+
+  <script>
+
+    const params = new URLSearchParams(window.location.search);
+    const animeId = params.get("id");
+
+    const details = document.getElementById("details");
+    const episodes = document.getElementById("episodes");
+
+
+    async function loadAnime() {
+
+      if (!animeId) {
+        details.innerHTML = "❌ لم يتم تحديد الأنمي.";
+        return;
+      }
+
+      try {
+
+        const response = await fetch(
+          `https://api.jikan.moe/v4/anime/${animeId}/full`
+        );
+
+        const result = await response.json();
+        const anime = result.data;
+
+        document.title = `${anime.title} - OtakuFlix`;
+
+        const poster =
+          anime.images?.jpg?.large_image_url ||
+          anime.images?.jpg?.image_url ||
+          "";
+
+        const description =
+          anime.synopsis ||
+          "لا توجد قصة متاحة لهذا الأنمي.";
+
+        const score =
+          anime.score
+            ? anime.score.toFixed(1)
+            : "N/A";
+
+        const year =
+          anime.year ||
+          "غير معروف";
+
+        const count =
+          anime.episodes ||
+          "?";
+
+        details.className = "details";
+
+        details.innerHTML = `
+
+          <img
+            class="poster"
+            src="${poster}"
+            alt="${anime.title}"
+          >
+
+          <div class="content">
+
+            <h1>${anime.title}</h1>
+
+            <div class="info">
+
+              <span class="tag rating">
+                ⭐ ${score}
+              </span>
+
+              <span class="tag">
+                📅 ${year}
+              </span>
+
+              <span class="tag">
+                🎞️ ${count} حلقة
+              </span>
+
+              <span class="tag">
+                ${anime.status || "غير معروف"}
+              </span>
+
+            </div>
+
+            <p class="description">
+              ${description}
+            </p>
+
+          </div>
+
+        `;
+
+        loadEpisodes();
+
+      } catch (error) {
+
+        details.innerHTML =
+          "❌ حدث خطأ أثناء تحميل معلومات الأنمي.";
+
+      }
+
+    }
+
+
+    async function loadEpisodes() {
+
+      episodes.innerHTML =
+        `<div class="loading">جاري تحميل الحلقات...</div>`;
+
+      try {
+
+        const response = await fetch(
+          `https://api.jikan.moe/v4/anime/${animeId}/episodes?limit=100`
+        );
+
+        const result = await response.json();
+
+        episodes.innerHTML = "";
+
+        if (!result.data || result.data.length === 0) {
+
+          episodes.innerHTML =
+            `<p style="color:#aaa">لا توجد معلومات عن الحلقات حالياً.</p>`;
+
+          return;
+        }
+
+
+        result.data.forEach(ep => {
+
+          const button =
+            document.createElement("div");
+
+          button.className = "episode";
+
+          button.textContent =
+            `الحلقة ${ep.mal_id}`;
+
+          button.onclick = () => {
+
+            alert(
+              "هذه صفحة الحلقة التجريبية.\nسنضيف المشاهدة لاحقاً 🔥"
+            );
+
+          };
+
+          episodes.appendChild(button);
+
+        });
+
+      } catch (error) {
+
+        episodes.innerHTML =
+          `<p style="color:#aaa">تعذر تحميل الحلقات.</p>`;
+
+      }
+
+    }
+
+
+    loadAnime();
+
+  </script>
+
+</body>
+</html>
